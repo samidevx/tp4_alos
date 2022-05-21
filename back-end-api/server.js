@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to React Alos tp 4 application." });
 });
 
-require("./app/routes/turorial.routes")(app);
+require("./app/routes/companies-mail.routes")(app);
 
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
