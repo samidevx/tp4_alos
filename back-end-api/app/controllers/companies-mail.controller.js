@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op;
 // Create and Save a new MailCompany
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.email) {
     res.status(400).send({
       message: "Content can not be empty!"
     });
@@ -14,9 +14,15 @@ exports.create = (req, res) => {
 
   // Create a MailCompany
   const mailcomp = {
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+    email: req.body.email,
+    first_name: req.body.first_name,
+    last_name: req.body.last_name,
+    company: req.body.company,
+    website_url: req.body.website_url,
+    linkedin: req.body.linkedin,
+    position: req.body.position,
+    country: req.body.country,
+    phone_number: req.body.phone_number,
   };
 
   // Save MailCompany in the database
@@ -34,8 +40,8 @@ exports.create = (req, res) => {
 
 // Retrieve all MailCompanys from the database.
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { [Op.like]: `%${title}%` } } : null;
+  const email = req.query.email;
+  var condition = email ? { email: { [Op.like]: `%${email}%` } } : null;
 
   Mailcompany.findAll({ where: condition })
     .then(data => {
@@ -49,27 +55,27 @@ exports.findAll = (req, res) => {
     });
 };
 
-// Find a single MailCompany with an id
+// Find a single MailCompany with an email
 exports.findOne = (req, res) => {
-  const id = req.params.id;
+  const email = req.params.email;
 
-  Mailcompany.findByPk(id)
+  Mailcompany.findByPk(email)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error retrieving MailCompany with id=" + id
+        message: "Error retrieving MailCompany with id=" + email
       });
     });
 };
 
-// Update a MailCompany by the id in the request
+// Update a MailCompany by the email in the request
 exports.update = (req, res) => {
-  const id = req.params.id;
+  const email = req.params.email;
 
   Mailcompany.update(req.body, {
-    where: { id: id }
+    where: { email: email }
   })
     .then(num => {
       if (num == 1) {
@@ -78,23 +84,23 @@ exports.update = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot update MailCompany with id=${id}. Maybe MailCompany was not found or req.body is empty!`
+          message: `Cannot update MailCompany with id=${email}. Maybe MailCompany was not found or req.body is empty!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Error updating MailCompany with id=" + id
+        message: "Error updating MailCompany with email=" + email
       });
     });
 };
 
-// Delete a MailCompany with the specified id in the request
+// Delete a MailCompany with the specified email in the request
 exports.delete = (req, res) => {
-  const id = req.params.id;
+  const email = req.params.email;
 
   Mailcompany.destroy({
-    where: { id: id }
+    where: { email: email }
   })
     .then(num => {
       if (num == 1) {
@@ -103,13 +109,13 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: `Cannot delete MailCompany with id=${id}. Maybe MailCompany was not found!`
+          message: `Cannot delete MailCompany with email=${email}. Maybe MailCompany was not found!`
         });
       }
     })
     .catch(err => {
       res.status(500).send({
-        message: "Could not delete MailCompany with id=" + id
+        message: "Could not delete MailCompany with email=" + email
       });
     });
 };
